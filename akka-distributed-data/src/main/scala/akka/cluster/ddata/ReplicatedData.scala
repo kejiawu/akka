@@ -115,6 +115,15 @@ trait ReplicatedDelta extends ReplicatedData {
 trait RequiresCausalDeliveryOfDeltas extends ReplicatedDelta
 
 /**
+ * Some complex deltas grow in size for each update and above a configured
+ * threshold such deltas are discarded and sent as full state instead. This
+ * interface should be implemented by such deltas to define its size.
+ */
+trait ReplicatedDeltaSize {
+  def deltaSize: Int
+}
+
+/**
  * Java API: Interface for implementing a [[ReplicatedData]] in Java.
  *
  * The type parameter `A` is a self-recursive type to be defined by the
