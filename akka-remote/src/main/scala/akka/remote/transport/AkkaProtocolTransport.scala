@@ -459,12 +459,12 @@ private[transport] class ProtocolStateActor(
           stop(FSM.Failure(info))
 
         case Heartbeat ⇒
-          failureDetector.heartbeat()
+          //failureDetector.heartbeat()
           stay()
 
         case Payload(payload) ⇒
           // use incoming ordinary message as alive sign
-          failureDetector.heartbeat()
+          //failureDetector.heartbeat()
           stateData match {
             case AssociatedWaitHandler(handlerFuture, wrappedHandle, queue) ⇒
               // Queue message until handler is registered
@@ -510,6 +510,7 @@ private[transport] class ProtocolStateActor(
       sendHeartbeat(wrappedHandle)
       stay()
     } else {
+      println(s"# TRANSPORT FAIL") // FIXME
       // send disassociate just to be sure
       sendDisassociate(wrappedHandle, Unknown)
       stop(FSM.Failure(TimeoutReason(s"No response from remote. " +
